@@ -4,14 +4,21 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <DocumentationFile>C:\Users\akish\OneDrive\Desktop\Projects\WizardsoftTestTask\Web.xml</DocumentationFile>
+    <UserSecretsId>759599df-ee98-4ccc-b055-f1418a554ebf</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application\Application.csproj" />
     <ProjectReference Include="..\Domain\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\Presentation\Presentation\Presentation.csproj" />
   </ItemGroup>
 

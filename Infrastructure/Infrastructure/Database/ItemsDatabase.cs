@@ -1,17 +1,12 @@
 ﻿using Domain;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Database;
+
 public class ItemsDatabase : DbContext
 {
     public ItemsDatabase(DbContextOptions<ItemsDatabase> options) : base(options)
     {
-        //Database.EnsureDeleted();
         Database.EnsureCreated();
     }
 
@@ -19,8 +14,10 @@ public class ItemsDatabase : DbContext
     {
         modelBuilder.Entity<Item>()
             .HasMany(x => x.ChildItems)
-            .WithOne(x => x.Parent)
+            .WithOne(x => x.Parent) 
+            .HasForeignKey(x => x.ParentId) 
             .OnDelete(DeleteBehavior.Cascade);
+
         base.OnModelCreating(modelBuilder);
     }
 

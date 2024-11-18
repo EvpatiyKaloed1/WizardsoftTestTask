@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  web:
+    image: ${DOCKER_REGISTRY-}web
+    build:
+      context: .
+      dockerfile: Web/Dockerfile
+    ports:
+    - "5000:5000"
+    environment:
+    - ASPNETCORE_URLS=http://+:5000
+    - ASPNETCORE_ENVIRONMENT=Docker
+    - DOTNET_RUNNING_IN_CONTAINER=true
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: WizardsoftTestTask
+    ports:
+      - "5555:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -7,14 +7,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Dto;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Presentation.Controllers;
-
 
 [Route("items")]
 public class ItemController : Controller
@@ -27,10 +21,12 @@ public class ItemController : Controller
     }
 
     [HttpGet("get/{id:guid}")]
-    public async Task<Item> GetItem(Guid id)
+    public async Task<Item> GetItem(Guid id, CancellationToken token)
     {
-        return await _sender.Send(new GetItemQuery(id));
+        return await _sender.Send(new GetItemQuery(id), token);
     }
+
+    #region Json
 
     [SwaggerOperation(Description =
         "Пример json" + """
@@ -52,27 +48,30 @@ public class ItemController : Controller
                     }]
                 }
             ]
-        }  
+        }
     """)]
+
+    #endregion Json
+
     [HttpPost("create")]
-    public async Task<Item> CreateItemAsync([FromBody] ItemDto dto)
+    public async Task<Item> CreateItemAsync([FromBody] ItemDto dto, CancellationToken token)
     {
         var item = dto.MapToItem();
 
-        return await _sender.Send(new CreateItemCommand(item.Name, item.ChildItems));
+        return await _sender.Send(new CreateItemCommand(item.Name, item.ChildItems), token);
     }
 
     [HttpPut("update")]
-    public async Task<Item> UpdateItemAsync([FromBody] UpdateItemDto dto)
+    public async Task<Item> UpdateItemAsync([FromBody] UpdateItemDto dto, CancellationToken token)
     {
         var item = dto.MapToItem();
 
-        return await _sender.Send(new UpdateItemCommand(item.ParentId, item.Id, item.Name, item.ChildItems));
+        return await _sender.Send(new UpdateItemCommand(item.ParentId, item.Id, item.Name, item.ChildItems), token);
     }
 
     [HttpDelete("delete/{id:guid}")]
-    public async Task DeleteItemAsync(Guid id)
+    public async Task DeleteItemAsync(Guid id, CancellationToken token)
     {
-        await _sender.Send(new DeleteItemQuery(id));
+        await _sender.Send(new DeleteItemQuery(id), token);
     }
 }
