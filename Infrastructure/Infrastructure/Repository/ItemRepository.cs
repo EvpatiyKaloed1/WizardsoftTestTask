@@ -26,6 +26,7 @@ public class ItemRepository : IItemRepository
     {
         return await _database.Items
             .Include(x => x.ChildItems)
+                .ThenInclude(x => x.ChildItems)
             .Include(x => x.Parent)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken: token);
     }
