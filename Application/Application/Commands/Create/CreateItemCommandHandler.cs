@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.Commands.Create;
-public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand>
+public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand,Item>
 {
     private readonly IItemRepository _repository;
 
@@ -17,19 +17,10 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand>
         _repository = repository;
     }
 
-    public async Task Handle(CreateItemCommand request, CancellationToken cancellationToken)
+    public async Task<Item> Handle(CreateItemCommand request, CancellationToken cancellationToken)
     {
-      
-        await _repository.CreateItem(new Item(request.Name, request.ChildItems ));
-    }
-
-
-    private async Task Validate(Guid? parentId)
-    {
-        var item = await _repository.GetItemAsync(parentId);
-        if (item == null)
-        {
-            throw new ItemExeption();
-        }
+        var item = new Item(request.Name, request.ChildItems);
+        await _repository.CreateItemAsync(item);
+        return item;
     }
 }

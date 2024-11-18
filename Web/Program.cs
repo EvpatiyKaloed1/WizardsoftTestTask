@@ -3,18 +3,25 @@ using Domain;
 using Infrastructure.Database;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
+using Presentation.Dto;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<IItemRepository,ItemRepository>();
-builder.Services.AddDbContext<ItemsDatabase>((options) => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")), ServiceLifetime.Transient);
+builder.Services.AddDbContext<ItemsDatabase>((options) => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddMediatR(assembly =>
 {
     assembly.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly);
 });
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+});
+
 
 var app = builder.Build();
 
@@ -22,7 +29,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
 }
 
 app.UseHttpsRedirection();

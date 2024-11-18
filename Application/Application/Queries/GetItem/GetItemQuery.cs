@@ -6,6 +6,5 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Commands.Create;
-public record CreateItemCommand (string Name,  List<Item> ChildItems) :IRequest<Item>;
-
+namespace Application.Queries.GetItem;
+public record GetItemQuery(Guid Id) : IRequest<Item>;

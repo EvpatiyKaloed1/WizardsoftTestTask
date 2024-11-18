@@ -5,13 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Domain;
-public sealed class Item
+public class Item
 {
     public string Name { get; set; }
     public Guid? ParentId { get; set; }
-    public Guid? Id { get; set; }
-    public List<Item?> ChildItems { get; set; }
-    public Item(string name, List<Item?>? childItems, Guid? parentId = null,Guid? id= null)
+    public Guid Id { get; set; }
+    public List<Item?> ChildItems { get; set; } = [];
+    public virtual Item Parent { get; set; }    
+
+    //for EF
+    private Item() { }
+    public Item(string name, List<Item?> childItems, Guid? parentId = null,Guid? id= null)
     {
         Name = name;
         ParentId = parentId;

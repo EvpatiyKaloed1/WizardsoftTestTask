@@ -17,6 +17,10 @@ public class ItemsDatabase : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Item>()
+            .HasMany(x => x.ChildItems)
+            .WithOne(x => x.Parent)
+            .OnDelete(DeleteBehavior.Cascade);
         base.OnModelCreating(modelBuilder);
     }
 
